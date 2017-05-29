@@ -13,7 +13,8 @@ import android.view.SurfaceView
  */
 
 class CustomSurfaceView : SurfaceView {
-    private var map: Array<IntArray>? = null
+
+    private var map: Array<CharArray>? = null
     private var sizeW = 0
     private var sizeH = 0
     private val numColumns = 30
@@ -25,7 +26,7 @@ class CustomSurfaceView : SurfaceView {
 
     fun paint() {
         if (map == null && width > 0) {
-            map = Array(numColumns) { IntArray(numRows) }
+            map = Array(numColumns) { CharArray(numRows) }
             sizeW = width / numColumns
             sizeH = height / numRows
         }
@@ -48,8 +49,8 @@ class CustomSurfaceView : SurfaceView {
         if (map != null && holder.surface.isValid) {
             val canvas = holder.lockCanvas()
             canvas.drawColor(Color.BLACK)
-            for (i in 0..(map as Array<IntArray>).size - 1) {
-                for (j in 0..(map as Array<IntArray>)[i].size - 1) {
+            for (i in 0..(map as Array<CharArray>).size - 1) {
+                for (j in 0..(map as Array<CharArray>)[i].size - 1) {
 
                     var text = ""
                     if (i > j)
@@ -58,23 +59,23 @@ class CustomSurfaceView : SurfaceView {
                         text = "║"
                     if (i == j )
                         text = "╔"
-                    if (j == 0 || j == (map as Array<IntArray>)[i].size - 1)
+                    if (j == 0 || j == (map as Array<CharArray>)[i].size - 1)
                         text = "═"
-                    if (i == 0 || i == (map as Array<IntArray>).size - 1)
+                    if (i == 0 || i == (map as Array<CharArray>).size - 1)
                         text = "║"
                     if (i == 0 && j == 0)
                         text = "╔"
-                    if (i == 0 && j == (map as Array<IntArray>)[i].size - 1)
+                    if (i == 0 && j == (map as Array<CharArray>)[i].size - 1)
                         text = "╚"
-                    if (i == (map as Array<IntArray>).size - 1 && j == 0)
+                    if (i == (map as Array<CharArray>).size - 1 && j == 0)
                         text = "╗"
-                    if (i == (map as Array<IntArray>).size - 1 && j == (map as Array<IntArray>)[i].size - 1)
+                    if (i == (map as Array<CharArray>).size - 1 && j == (map as Array<CharArray>)[i].size - 1)
                         text = "╝"
 
                     p = !p
 
                     p1.getTextBounds("█", 0, 1, textBounds)
-                    canvas.drawText(text, (i * sizeW + sizeW / 2).toFloat(), (j * sizeH + textBounds.height() / 2).toFloat(), p1)
+                    canvas.drawText(text, (i * sizeW + sizeW / 2).toFloat(), (j * sizeH + sizeH / 2).toFloat(), p1)
                 }
                 p = !p
             }
@@ -82,5 +83,8 @@ class CustomSurfaceView : SurfaceView {
         }
     }
 
+    fun setChatAtPos(char: Char,x: Int, y: Int) {
+//        map!![x][y] = char
+    }
 
 }
