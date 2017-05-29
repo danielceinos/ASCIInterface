@@ -14,77 +14,40 @@ import android.view.SurfaceView
 
 class CustomSurfaceView : SurfaceView {
 
-    private var map: Array<CharArray>? = null
     private var sizeW = 0
     private var sizeH = 0
-    private val numColumns = 30
-    private val numRows = 26
+    private val numColumns = 41
+    private val numRows = 29
+    private var map: Array<CharArray>? = Array(numColumns) { CharArray(numRows) }
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attr: AttributeSet) : super(context, attr)
     constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr)
 
     fun paint() {
-        if (map == null && width > 0) {
-            map = Array(numColumns) { CharArray(numRows) }
-            sizeW = width / numColumns
-            sizeH = height / numRows
-        }
-
         val p1 = Paint()
         p1.color = Color.GREEN
-        p1.textSize = 50F
+        p1.textSize = 40F
         p1.textAlign = Paint.Align.CENTER
         p1.typeface = Typeface.MONOSPACE
         val fm = p1.getFontMetrics()
-        sizeH = (fm.descent - fm.ascent).toInt()
+        sizeH = (fm.descent - fm.ascent + fm.leading).toInt()
         sizeW = p1.measureText("█").toInt()
-        val p2 = Paint()
-        p2.color = Color.BLACK
-        val p3 = Paint()
-        p3.color = Color.DKGRAY
-        var textBounds = Rect()
-        var p = false
 
         if (map != null && holder.surface.isValid) {
             val canvas = holder.lockCanvas()
             canvas.drawColor(Color.BLACK)
             for (i in 0..(map as Array<CharArray>).size - 1) {
                 for (j in 0..(map as Array<CharArray>)[i].size - 1) {
-
-                    var text = ""
-                    if (i > j)
-                        text = "═"
-                    if (j > i)
-                        text = "║"
-                    if (i == j )
-                        text = "╔"
-                    if (j == 0 || j == (map as Array<CharArray>)[i].size - 1)
-                        text = "═"
-                    if (i == 0 || i == (map as Array<CharArray>).size - 1)
-                        text = "║"
-                    if (i == 0 && j == 0)
-                        text = "╔"
-                    if (i == 0 && j == (map as Array<CharArray>)[i].size - 1)
-                        text = "╚"
-                    if (i == (map as Array<CharArray>).size - 1 && j == 0)
-                        text = "╗"
-                    if (i == (map as Array<CharArray>).size - 1 && j == (map as Array<CharArray>)[i].size - 1)
-                        text = "╝"
-
-                    p = !p
-
-                    p1.getTextBounds("█", 0, 1, textBounds)
-                    canvas.drawText(text, (i * sizeW + sizeW / 2).toFloat(), (j * sizeH + sizeH / 2).toFloat(), p1)
+                    canvas.drawText((map as Array<CharArray>)[i][j].toString(), (i * sizeW + sizeW / 2).toFloat(), (j * sizeH + sizeH).toFloat(), p1)
                 }
-                p = !p
             }
             holder.unlockCanvasAndPost(canvas)
         }
     }
 
     fun setChatAtPos(char: Char,x: Int, y: Int) {
-//        map!![x][y] = char
+        map!![x][y] = char
     }
 
 }
