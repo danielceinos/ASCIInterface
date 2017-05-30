@@ -22,11 +22,12 @@ class MainActivity : AppCompatActivity() {
         try {
             while (s.hasNext()) {
                 val word = s.next()
-                surfaceView.setChatAtPos(word.toCharArray()[0], x, y)
+                if (word != "\n")
+                    surfaceView.setChatAtPos(word.toCharArray()[0], x, y)
                 x++
                 if (word == "\n") {
                     y++
-                    x= 0
+                    x = 0
                 }
             }
         } finally {
