@@ -2,7 +2,6 @@ package com.arstotzka.asciinterface
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import kotlin.concurrent.thread
 import java.util.*
 
@@ -14,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val surfaceView = findViewById(R.id.surfaceView) as CustomSurfaceView
-
         val s = Scanner(resources.openRawResource(R.raw.texto))
         s.useDelimiter("")
         var x = 0
