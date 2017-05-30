@@ -9,10 +9,12 @@ class AsciiView {
     private var y: Int
     private var mtx: Array<CharArray>?
     private var child: AsciiView? = null
+    private var parent: AsciiView
 
-    constructor(x: Int, y: Int) {
+    constructor(x: Int, y: Int, parent: AsciiView) {
         this.x = x
         this.y = y
+        this.parent = parent
 
         mtx = Array(x) { CharArray(y) }
     }
@@ -26,5 +28,7 @@ class AsciiView {
                     .filter { childMtx[i][it] != ' ' }
                     .forEach { mtx!![i][it] = childMtx[i][it] }
         }
+
+        parent.setChild(this)
     }
 }
