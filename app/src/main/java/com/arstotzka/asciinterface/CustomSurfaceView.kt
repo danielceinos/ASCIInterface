@@ -17,7 +17,7 @@ class CustomSurfaceView : SurfaceView {
     private var sizeH = 0
     private val numColumns = 40
     private val numRows = 29
-    private var map: Array<CharArray>? = Array(numColumns) { CharArray(numRows) }
+    var map: Array<CharArray>? = Array(numColumns) { CharArray(numRows) }
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attr: AttributeSet) : super(context, attr)

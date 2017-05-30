@@ -1,5 +1,7 @@
 package com.arstotzka.asciinterface.views
 
+import android.util.Log
+
 /**
  * Created by Daniel S on 30/05/2017.
  */
@@ -7,16 +9,16 @@ class AsciiView {
 
     private var x: Int
     private var y: Int
-    private var mtx: Array<CharArray>?
+    var mtx: Array<CharArray>?
     private var child: AsciiView? = null
-    private var parent: AsciiView
+    private var parent: AsciiView?
 
-    constructor(x: Int, y: Int, parent: AsciiView) {
+    constructor(x: Int, y: Int, parent: AsciiView?) {
         this.x = x
         this.y = y
         this.parent = parent
 
-        mtx = Array(x) { CharArray(y) }
+        mtx = Array(9) { CharArray(3) }
     }
 
     fun setChild(child: AsciiView) {
@@ -29,6 +31,21 @@ class AsciiView {
                     .forEach { mtx!![i][it] = childMtx[i][it] }
         }
 
-        parent.setChild(this)
+        parent!!.setChild(this)
+    }
+
+    fun setTextLayout(textLayout: String) {
+        var x = 0
+        var y = 0
+        for (char in textLayout) {
+            Log.e("TAG", char.toString() + " - " + x + " / " + y)
+            if (char != '\n') {
+                mtx!![x][y] = char
+                x++
+            } else {
+                y++
+                x = 0
+            }
+        }
     }
 }
