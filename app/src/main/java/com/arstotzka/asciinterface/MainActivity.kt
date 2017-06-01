@@ -17,19 +17,10 @@ class MainActivity : AppCompatActivity() {
         var viewTextLayout = ""
         val s = Scanner(resources.openRawResource(R.raw.view1))
         s.useDelimiter("")
-        var x = 0
-        var y = 0
         try {
             while (s.hasNext()) {
                 val word = s.next()
                 viewTextLayout += word
-//                if (word != "\n")
-//                    surfaceView.setChatAtPos(word.toCharArray()[0], x, y)
-//                x++
-//                if (word == "\n") {
-//                    y++
-//                    x = 0
-//                }
             }
         } finally {
 
