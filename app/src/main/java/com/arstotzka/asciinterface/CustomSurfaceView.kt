@@ -35,7 +35,7 @@ class CustomSurfaceView : SurfaceView {
             canvas.drawColor(Color.BLACK)
             for (i in 0..(map as Array<CharArray>).size - 1) {
                 for (j in 0..(map as Array<CharArray>)[i].size - 1) {
-                    canvas.drawText((map as Array<CharArray>)[i][j].toString(), (i * sizeW+sizeW).toFloat(), (j * sizeH + sizeH).toFloat(), p1)
+                    canvas.drawText((map as Array<CharArray>)[i][j].toString(), (i * sizeW+sizeW/2).toFloat(), (j * sizeH + sizeH).toFloat(), p1)
                 }
             }
             holder.unlockCanvasAndPost(canvas)
