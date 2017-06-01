@@ -13,10 +13,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val surfaceView = findViewById(R.id.surfaceView) as CustomSurfaceView
 
-        var b = Button(0, 0, 40, 29, null)
-        Button(1, 1, 15, 6, b)
-        Button(3, 4, 10, 4, b)
-        Button(9, 10, 10, 2, b)
+        var b = Button("boton padre", 0, 0, 40, 29, null)
+        Button(":3", 1, 1, 15, 7, b)
+        Button("holi ", 3, 4, 11, 5, b)
+        Button("pulsa", 9, 15, 11, 5, b)
         surfaceView.map = b.mtx
 
         thread {
