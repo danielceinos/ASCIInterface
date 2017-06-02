@@ -6,12 +6,14 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.SurfaceView
+import android.view.View
+import android.view.View.OnClickListener
 
 /**
  * Created by Daniel S on 29/05/2017.
  */
 
-class CustomSurfaceView : SurfaceView {
+class CustomSurfaceView : SurfaceView, OnClickListener {
 
     private var sizeW = 0
     private var sizeH = 0
@@ -50,6 +52,10 @@ class CustomSurfaceView : SurfaceView {
         super.onSizeChanged(w, h, oldw, oldh)
         sizeH = h / numRows
         sizeW = w / numColumns
+    }
+
+    override fun onClick(v: View?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

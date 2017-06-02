@@ -49,7 +49,6 @@ open class AsciiView {
         var x = 0
         var y = 0
         for (char in textLayout) {
-            Log.e("TAG", char.toString() + " - " + x + " / " + y)
             if (char != '\n') {
                 mtx!![x][y] = char
                 x++
@@ -59,5 +58,4 @@ open class AsciiView {
             }
         }
     }
-
 }
