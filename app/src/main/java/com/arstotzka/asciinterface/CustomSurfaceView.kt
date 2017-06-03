@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.SurfaceView
 import android.view.View
 import android.view.View.OnClickListener
+import com.arstotzka.asciinterface.views.AsciiView
+import com.arstotzka.asciinterface.views.Button
 
 /**
  * Created by Daniel S on 29/05/2017.
@@ -19,11 +21,28 @@ class CustomSurfaceView : SurfaceView, OnClickListener {
     private var sizeH = 0
     private val numColumns = 40
     private val numRows = 29
+    private var view: AsciiView? = null
     var map: Array<CharArray>? = Array(numColumns) { CharArray(numRows) }
 
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attr: AttributeSet) : super(context, attr)
-    constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr)
+    constructor(context: Context) : super(context) {
+        init()
+    }
+
+    constructor(context: Context, attr: AttributeSet) : super(context, attr) {
+        init()
+    }
+
+    constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr) {
+        init()
+    }
+
+    fun init() {
+        view = Button("boton padre", 0, 0, 40, 29, null)
+        Button(":3", 1, 1, 15, 7, view)
+        Button("holi ", 3, 4, 11, 5, view)
+        Button("pulsa", 9, 15, 11, 5, view)
+        map = (view as AsciiView).mtx
+    }
 
     fun paint() {
         val p1 = Paint()
@@ -37,7 +56,7 @@ class CustomSurfaceView : SurfaceView, OnClickListener {
             canvas.drawColor(Color.BLACK)
             for (i in 0..(map as Array<CharArray>).size - 1) {
                 for (j in 0..(map as Array<CharArray>)[i].size - 1) {
-                    canvas.drawText((map as Array<CharArray>)[i][j].toString(), (i * sizeW+sizeW/2).toFloat(), (j * sizeH + sizeH).toFloat(), p1)
+                    canvas.drawText((map as Array<CharArray>)[i][j].toString(), (i * sizeW + sizeW / 2).toFloat(), (j * sizeH + sizeH).toFloat(), p1)
                 }
             }
             holder.unlockCanvasAndPost(canvas)
