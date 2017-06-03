@@ -81,7 +81,6 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         val x = event!!.x * numColumns / this.width
         val y = event.y * numRows / this.height
-        Log.e("TAG", "" + x + " - " + y)
         view!!.onClick(x.toInt(), y.toInt())
 
         return true

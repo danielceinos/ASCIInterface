@@ -28,7 +28,7 @@ open class AsciiView : OnClick {
 
     fun addChild(child: AsciiView) {
         childs.add(child)
-
+        child.parent = this
         val childMtx = child.mtx
         for (i in 0..childMtx!!.size - 1) {
             (0..childMtx[i].size - 1)
@@ -37,17 +37,30 @@ open class AsciiView : OnClick {
         }
     }
 
+    open fun refresh() {
+        for (child in childs) {
+            val childMtx = child.mtx
+            for (i in 0..childMtx!!.size - 1) {
+                (0..childMtx[i].size - 1)
+                        .filter { childMtx[i][it] != ' ' }
+                        .forEach { mtx!![i + child.x][it + child.y] = childMtx[i][it] }
+            }
+        }
+    }
+
     open fun setChar(x: Int, y: Int, char: Char) {
         mtx!![x][y] = char
     }
 
     override fun onClick(x: Int, y: Int): Boolean {
-//        if (bounds?.contains(x, y)!!)
-//            return true
-        for (child in childs) {
-            child.onClick(x, y)
+        if (bounds?.contains(x,y)!!) {
+            for (child in childs) {
+                child.onClick(x, y)
+            }
+            parent?.refresh()
+            return true
         }
-        return true
+        return false
     }
 
     open fun setTextLayout(textLayout: String) {

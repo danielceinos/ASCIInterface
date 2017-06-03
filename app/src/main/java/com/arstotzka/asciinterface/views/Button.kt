@@ -6,8 +6,9 @@ package com.arstotzka.asciinterface.views
 
 class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(x, y, width, height) {
 
-    init {
+    var name: String = text
 
+    init {
         setChar(0, 0, '╔')
         setChar(width - 1, 0, '╗')
         setChar(0, height - 1, '╚')
@@ -31,14 +32,15 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
     }
 
     override fun onClick(x: Int, y: Int): Boolean {
-        val text = "PULSADO"
-        var indx = 0
-        for (c in text) {
-            setChar(indx + width / 2 - text.length / 2, height / 2, c)
-            indx++
+        if(super.onClick(x, y)) {
+            val text = "PULSADO"
+            var indx = 0
+            for (c in text) {
+                setChar(indx + width / 2 - text.length / 2, height / 2, c)
+                indx++
+            }
+            return true
         }
-
-        return super.onClick(x, y)
+        return false
     }
-
 }
