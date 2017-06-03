@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.View
 import android.view.View.OnClickListener
@@ -15,7 +17,7 @@ import com.arstotzka.asciinterface.views.Button
  * Created by Daniel S on 29/05/2017.
  */
 
-class CustomSurfaceView : SurfaceView, OnClickListener {
+class CustomSurfaceView : SurfaceView, View.OnTouchListener {
 
     private var sizeW = 0
     private var sizeH = 0
@@ -37,11 +39,14 @@ class CustomSurfaceView : SurfaceView, OnClickListener {
     }
 
     fun init() {
-        view = Button("boton padre", 0, 0, 40, 29, null)
-        Button(":3", 1, 1, 15, 7, view)
-        Button("holi ", 3, 4, 11, 5, view)
-        Button("pulsa", 9, 15, 11, 5, view)
+        view = Button("boton padre", 0, 0, 40, 29)
+        (view as AsciiView).addChild(Button(":3", 1, 1, 15, 7))
+        (view as AsciiView).addChild(Button("holi ", 3, 4, 11, 5))
+        (view as AsciiView).addChild(Button("pulsa", 9, 15, 11, 5))
+
         map = (view as AsciiView).mtx
+
+        setOnTouchListener(this)
     }
 
     fun paint() {
@@ -73,8 +78,12 @@ class CustomSurfaceView : SurfaceView, OnClickListener {
         sizeW = w / numColumns
     }
 
-    override fun onClick(v: View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        val x = event!!.x * numColumns / this.width
+        val y = event.y * numRows / this.height
+        Log.e("TAG", "" + x + " - " + y)
+        view!!.onClick(x.toInt(), y.toInt())
 
+        return true
+    }
 }
