@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_UP
 import android.view.SurfaceView
 import android.view.View
 import android.view.View.OnClickListener
@@ -38,16 +39,18 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
         init()
     }
 
+    var b2: AsciiView? = null
     fun init() {
-        view = Button("boton padre", 0, 0, 40, 29)
-        (view as AsciiView).onClickListener = this
-        (view as AsciiView).addChild(Button(":3", 1, 1, 15, 7))
-        val b1 = Button("holi ", 3, 4, 11, 5)
-        b1.onClickListener = this
-        (view as AsciiView).addChild(b1)
-        (view as AsciiView).addChild(Button("pulsa", 9, 15, 11, 5))
+        view = Button("boton padre", 0, 0, numColumns, numRows)
+//        (view as AsciiView).onClickListener = this
+//        (view as AsciiView).addChild(Button(":3", 1, 1, 15, 7))
+//        val b1 = Button("holi ", 3, 4, 11, 5)
+//        b1.onClickListener = this
+//        (view as AsciiView).addChild(b1)
 
-
+        b2 = Button("pulsa", 9, 15, 11, 5)
+        (b2 as Button).onClickListener = this
+        (view as AsciiView).addChild(b2 as Button)
 
         map = (view as AsciiView).mtx
 
@@ -55,6 +58,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
     }
 
     fun paint() {
+        (b2 as Button).moveOneUp()
         val p1 = Paint()
         p1.color = Color.GREEN
         p1.textSize = 40F
@@ -65,9 +69,9 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
             val canvas = holder.lockCanvas()
             canvas.drawColor(Color.BLACK)
             for (i in 0..(map as Array<CharArray>).size - 1) {
-                for (j in 0..(map as Array<CharArray>)[i].size - 1) {
-                    canvas.drawText((map as Array<CharArray>)[i][j].toString(), (i * sizeW + sizeW / 2).toFloat(), (j * sizeH + sizeH).toFloat(), p1)
-                }
+                (0..(map as Array<CharArray>)[i].size - 1)
+                        .filter { (map as Array<CharArray>)[i][it] != '*' }
+                        .forEach { canvas.drawText((map as Array<CharArray>)[i][it].toString(), (i * sizeW + sizeW / 2).toFloat(), (it * sizeH + sizeH).toFloat(), p1) }
             }
             holder.unlockCanvasAndPost(canvas)
         }
@@ -84,9 +88,11 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        val x = event!!.x * numColumns / this.width
-        val y = event.y * numRows / this.height
-        view!!.onClick(x.toInt(), y.toInt())
+        if (event?.action == ACTION_UP) {
+            val x = event.x * numColumns / this.width
+            val y = event.y * numRows / this.height
+            view!!.onClick(x.toInt(), y.toInt())
+        }
 
         return true
     }
