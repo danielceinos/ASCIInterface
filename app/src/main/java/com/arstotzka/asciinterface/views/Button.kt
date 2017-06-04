@@ -56,12 +56,9 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
         parent?.refresh()
     }
 
-    var t = 0.0
-    fun moveOneUp() {
-        t += 0.05
-        val dx = (0 * Math.sin(t)).toInt()
-        val dy = (7 * Math.cos(t)).toInt()
-        bounds?.offsetTo(dx+15, dy+10)
+
+    fun moveTo(x: Int, y: Int) {
+        bounds?.offsetTo(x-width/2, y-height/2)
         parent?.refresh()
     }
 }

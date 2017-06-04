@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.SurfaceView
 import android.view.View
@@ -58,7 +59,6 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
     }
 
     fun paint() {
-        (b2 as Button).moveOneUp()
         val p1 = Paint()
         p1.color = Color.GREEN
         p1.textSize = 40F
@@ -88,16 +88,25 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if (event?.action == ACTION_UP) {
+        if (event?.action == ACTION_UP || event?.action == ACTION_MOVE) {
             val x = event.x * numColumns / this.width
             val y = event.y * numRows / this.height
-            view!!.onClick(x.toInt(), y.toInt())
+            view!!.onClick(event, x.toInt(), y.toInt())
         }
+
+
 
         return true
     }
 
-    override fun onClick(view: AsciiView?) {
+    override fun onClick(event: MotionEvent?, view: AsciiView?) {
         (view as Button).changeText()
+
+        if (event?.action == ACTION_MOVE) {
+            val x = event.x * numColumns / this.width
+            val y = event.y * numRows / this.height
+
+            (view as Button).moveTo(x.toInt(), y.toInt())
+        }
     }
 }
