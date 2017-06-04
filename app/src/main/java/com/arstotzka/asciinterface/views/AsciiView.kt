@@ -5,7 +5,7 @@ import android.graphics.Rect
 /**
  * Created by Daniel S on 30/05/2017.
  */
-open class AsciiView : OnClick {
+open class AsciiView {
 
     var x: Int
     var y: Int
@@ -15,6 +15,8 @@ open class AsciiView : OnClick {
     var mtx: Array<CharArray>?
     private var childs: ArrayList<AsciiView> = ArrayList()
     var parent: AsciiView? = null
+    var onClickListener: OnClickListener? = null
+        set
 
     constructor(x: Int, y: Int, width: Int, height: Int) {
         this.x = x
@@ -52,15 +54,12 @@ open class AsciiView : OnClick {
         mtx!![x][y] = char
     }
 
-    override fun onClick(x: Int, y: Int): Boolean {
-        if (bounds?.contains(x,y)!!) {
-            for (child in childs) {
-                child.onClick(x, y)
-            }
-            parent?.refresh()
-            return true
+    fun onClick(x: Int, y: Int) {
+        if (bounds?.contains(x, y)!!) {
+            val childClicked: AsciiView? = childs.lastOrNull { it.bounds!!.contains(x, y) }
+            childClicked?.onClickListener?.onClick(childClicked)
         }
-        return false
+        onClickListener?.onClick(this)
     }
 
     open fun setTextLayout(textLayout: String) {

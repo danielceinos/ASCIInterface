@@ -31,16 +31,18 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
         parent?.addChild(this)
     }
 
-    override fun onClick(x: Int, y: Int): Boolean {
-        if(super.onClick(x, y)) {
-            val text = "PULSADO"
-            var indx = 0
-            for (c in text) {
-                setChar(indx + width / 2 - text.length / 2, height / 2, c)
-                indx++
-            }
-            return true
+    fun changeText() {
+        val texto = "PULSADO"
+        var indx = 0
+        for (c in name) {
+            setChar(indx + width / 2 - name.length / 2, height / 2, ' ')
+            indx++
         }
-        return false
+        indx = 0
+        for (c in texto) {
+            setChar(indx + width / 2 - texto.length / 2, height / 2, c)
+            indx++
+        }
+        parent?.refresh()
     }
 }

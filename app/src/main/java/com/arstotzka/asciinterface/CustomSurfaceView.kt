@@ -17,7 +17,7 @@ import com.arstotzka.asciinterface.views.Button
  * Created by Daniel S on 29/05/2017.
  */
 
-class CustomSurfaceView : SurfaceView, View.OnTouchListener {
+class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.asciinterface.views.OnClickListener {
 
     private var sizeW = 0
     private var sizeH = 0
@@ -84,5 +84,9 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
         view!!.onClick(x.toInt(), y.toInt())
 
         return true
+    }
+
+    override fun onClick(view: AsciiView?) {
+        (view as Button).changeText()
     }
 }
