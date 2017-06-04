@@ -16,7 +16,6 @@ open class AsciiView {
     private var childs: ArrayList<AsciiView> = ArrayList()
     var parent: AsciiView? = null
     var onClickListener: OnClickListener? = null
-        set
 
     constructor(x: Int, y: Int, width: Int, height: Int) {
         this.x = x
@@ -56,10 +55,12 @@ open class AsciiView {
 
     fun onClick(x: Int, y: Int) {
         if (bounds?.contains(x, y)!!) {
-            val childClicked: AsciiView? = childs.lastOrNull { it.bounds!!.contains(x, y) }
+            val childClicked: AsciiView? = childs.lastOrNull { it.onClickListener != null && it.bounds!!.contains(x, y) }
             childClicked?.onClickListener?.onClick(childClicked)
+            if (childClicked == null)
+                onClickListener?.onClick(this)
         }
-        onClickListener?.onClick(this)
+
     }
 
     open fun setTextLayout(textLayout: String) {

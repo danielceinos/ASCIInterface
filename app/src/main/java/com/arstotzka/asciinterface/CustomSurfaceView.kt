@@ -40,9 +40,14 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
 
     fun init() {
         view = Button("boton padre", 0, 0, 40, 29)
+        (view as AsciiView).onClickListener = this
         (view as AsciiView).addChild(Button(":3", 1, 1, 15, 7))
-        (view as AsciiView).addChild(Button("holi ", 3, 4, 11, 5))
+        val b1 = Button("holi ", 3, 4, 11, 5)
+        b1.onClickListener = this
+        (view as AsciiView).addChild(b1)
         (view as AsciiView).addChild(Button("pulsa", 9, 15, 11, 5))
+
+
 
         map = (view as AsciiView).mtx
 
