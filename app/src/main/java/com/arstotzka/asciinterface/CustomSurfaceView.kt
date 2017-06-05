@@ -45,9 +45,10 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
         view = Button("boton padre", 0, 0, numColumns, numRows)
 //        (view as AsciiView).onClickListener = this
 //        (view as AsciiView).addChild(Button(":3", 1, 1, 15, 7))
-//        val b1 = Button("holi ", 3, 4, 11, 5)
-//        b1.onClickListener = this
-//        (view as AsciiView).addChild(b1)
+
+        val b1 = Button("holi ", 3, 4, 11, 5)
+        b1.onClickListener = this
+        (view as AsciiView).addChild(b1)
 
         b2 = Button("pulsa", 9, 15, 11, 5)
         (b2 as Button).onClickListener = this

@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
         thread {
             while (true) {
                 surfaceView.paint()
+
+                Thread.sleep(10)
             }
         }
     }
