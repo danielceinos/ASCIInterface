@@ -11,12 +11,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val surfaceView = findViewById(R.id.surfaceView) as CustomSurfaceView
 
-        thread {
-            while (true) {
-                surfaceView.paint()
 
-                Thread.sleep(10)
-            }
-        }
     }
 }

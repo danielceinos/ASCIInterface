@@ -1,7 +1,6 @@
 package com.arstotzka.asciinterface.views
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.MotionEvent
 
 /**
@@ -15,6 +14,7 @@ open class AsciiView {
     var mtx: Array<CharArray>?
     private var childs: ArrayList<AsciiView> = ArrayList()
     var parent: AsciiView? = null
+    var window: AsciiWindow? = null
     var onClickListener: OnClickListener? = null
     val TRANSPARENT_CHAR = '*'
 
@@ -26,7 +26,7 @@ open class AsciiView {
         mtx = Array(width) { CharArray(height) }
     }
 
-    open fun paint() {
+    open fun clear() {
         for (x in 0..width - 1) {
             for (y in 0..height - 1) {
                 setChar(x, y, ' ')
@@ -45,8 +45,8 @@ open class AsciiView {
         }
     }
 
-    open fun refresh() {
-        paint()
+    open fun rePaint() {
+        clear()
         for (child in childs) {
             val childMtx = child.mtx
             for (i in 0..childMtx!!.size - 1) {
@@ -57,6 +57,8 @@ open class AsciiView {
                         .forEach { mtx!![i + child.bounds!!.left][it + child.bounds!!.top] = childMtx[i][it] }
             }
         }
+
+        window?.refresh()
     }
 
     open fun setChar(x: Int, y: Int, char: Char) {

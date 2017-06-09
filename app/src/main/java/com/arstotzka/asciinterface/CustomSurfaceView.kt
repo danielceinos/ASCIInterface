@@ -12,6 +12,9 @@ import android.view.SurfaceView
 import android.view.View
 import com.arstotzka.asciinterface.views.AsciiView
 import com.arstotzka.asciinterface.views.AsciiWindow
+import com.arstotzka.asciinterface.views.Button
+import android.view.SurfaceHolder
+
 
 /**
  * Created by Daniel S on 29/05/2017.
@@ -38,7 +41,19 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
     }
 
     fun init() {
-        window = AsciiWindow(numColumns, numRows, this, AsciiView(0, 0, numColumns, numColumns))
+        holder.addCallback(object : SurfaceHolder.Callback {
+            override fun surfaceDestroyed(holder: SurfaceHolder) {
+                //stop render thread here
+            }
+
+            override fun surfaceCreated(holder: SurfaceHolder) {
+                window?.refresh()
+            }
+
+            override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
+
+        })
+        window = AsciiWindow(numColumns, numRows, this, Button("padre", 0, 0, numColumns, numRows))
         setOnTouchListener(this)
     }
 
@@ -49,7 +64,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
         p1.textAlign = Paint.Align.CENTER
         p1.typeface = Typeface.MONOSPACE
 
-        if (map != null && holder.surface.isValid) {
+        if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
             canvas.drawColor(Color.BLACK)
             for (i in 0..map.size - 1) {
