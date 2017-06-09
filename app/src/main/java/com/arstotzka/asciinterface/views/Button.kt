@@ -1,7 +1,5 @@
 package com.arstotzka.asciinterface.views
 
-import android.util.Log
-
 /**
  * Created by Daniel S on 01/06/2017.
  */
@@ -11,12 +9,12 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
     var name: String = text
 
     init {
-        paint()
+        clear()
         parent?.addChild(this)
     }
 
-    override fun paint() {
-        super.paint()
+    override fun clear() {
+        super.clear()
 
         setChar(0, 0, '╔')
         setChar(width - 1, 0, '╗')
@@ -36,7 +34,6 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
             setChar(indx + width / 2 - name.length / 2, height / 2, c)
             indx++
         }
-
     }
 
     fun changeText() {
@@ -53,12 +50,10 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
             indx++
         }
 
-        parent?.refresh()
+        parent?.rePaint()
+        window?.refresh()
     }
 
 
-    fun moveTo(x: Int, y: Int) {
-        bounds?.offsetTo(x-width/2, y-height/2)
-        parent?.refresh()
-    }
+
 }

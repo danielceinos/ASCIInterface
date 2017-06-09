@@ -15,6 +15,7 @@ open class AsciiView {
     var mtx: Array<CharArray>?
     private var childs: ArrayList<AsciiView> = ArrayList()
     var parent: AsciiView? = null
+    var window: AsciiWindow? = null
     var onClickListener: OnClickListener? = null
     val TRANSPARENT_CHAR = '*'
 
@@ -26,7 +27,7 @@ open class AsciiView {
         mtx = Array(width) { CharArray(height) }
     }
 
-    open fun paint() {
+    open fun clear() {
         for (x in 0..width - 1) {
             for (y in 0..height - 1) {
                 setChar(x, y, ' ')
@@ -45,8 +46,8 @@ open class AsciiView {
         }
     }
 
-    open fun refresh() {
-        paint()
+    open fun rePaint() {
+        clear()
         for (child in childs) {
             val childMtx = child.mtx
             for (i in 0..childMtx!!.size - 1) {
@@ -57,20 +58,22 @@ open class AsciiView {
                         .forEach { mtx!![i + child.bounds!!.left][it + child.bounds!!.top] = childMtx[i][it] }
             }
         }
+        parent?.rePaint()
+        window?.refresh()
     }
 
     open fun setChar(x: Int, y: Int, char: Char) {
         mtx!![x][y] = char
     }
 
-    fun onClick(event: MotionEvent?, x: Int, y: Int) {
-
+    fun onClick(event: MotionEvent?, x: Int, y: Int): ArrayList<AsciiView> {
+        val listView = ArrayList<AsciiView>()
         if (bounds?.contains(x, y)!!) {
-            val childClicked: AsciiView? = childs.lastOrNull { it.onClickListener != null && it.bounds!!.contains(x, y) }
-            childClicked?.onClickListener?.onClick(event, childClicked)
-            if (childClicked == null)
-                onClickListener?.onClick(event, this)
+            listView.add(this)
+            for (child in childs)
+                listView.addAll(child.onClick(event, x - bounds!!.left, y - bounds!!.top))
         }
+        return listView
     }
 
     open fun setTextLayout(textLayout: String) {
@@ -85,5 +88,14 @@ open class AsciiView {
                 x = 0
             }
         }
+    }
+
+    open fun moveTo(x: Int, y: Int) {
+//        if (x != this.bounds?.centerX() || y != this.bounds?.centerY()) {
+        val xx = bounds!!.left
+        val yy = bounds!!.top
+        bounds?.offsetTo(x, y)
+        parent?.rePaint()
+//        }
     }
 }

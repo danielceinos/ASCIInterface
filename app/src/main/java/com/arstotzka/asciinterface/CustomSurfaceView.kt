@@ -11,22 +11,25 @@ import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
 import android.view.SurfaceView
 import android.view.View
-import android.view.View.OnClickListener
 import com.arstotzka.asciinterface.views.AsciiView
+import com.arstotzka.asciinterface.views.AsciiWindow
 import com.arstotzka.asciinterface.views.Button
+import android.view.SurfaceHolder
+import com.arstotzka.asciinterface.views.OnClickListener
+
 
 /**
  * Created by Daniel S on 29/05/2017.
  */
 
-class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.asciinterface.views.OnClickListener {
+class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
+
 
     private var sizeW = 0
     private var sizeH = 0
     private val numColumns = 40
     private val numRows = 29
-    private var view: AsciiView? = null
-    var map: Array<CharArray>? = Array(numColumns) { CharArray(numRows) }
+    private var window: AsciiWindow? = null
 
     constructor(context: Context) : super(context) {
         init()
@@ -40,46 +43,51 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
         init()
     }
 
-    var b2: AsciiView? = null
     fun init() {
-        view = Button("boton padre", 0, 0, numColumns, numRows)
-//        (view as AsciiView).onClickListener = this
-//        (view as AsciiView).addChild(Button(":3", 1, 1, 15, 7))
+        holder.addCallback(object : SurfaceHolder.Callback {
+            override fun surfaceDestroyed(holder: SurfaceHolder) {
+                //stop render thread here
+            }
 
-        val b1 = Button("holi ", 3, 4, 11, 5)
-        b1.onClickListener = this
-        (view as AsciiView).addChild(b1)
+            override fun surfaceCreated(holder: SurfaceHolder) {
+                window?.refresh()
+            }
 
-        b2 = Button("pulsa", 9, 15, 11, 5)
-        (b2 as Button).onClickListener = this
-        (view as AsciiView).addChild(b2 as Button)
+            override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
-        map = (view as AsciiView).mtx
-
+        })
+        window = AsciiWindow(numColumns, numRows, this, Button("padre", 0, 0, numColumns, numRows))
+        window?.view?.onClickListener = this
+        val child = Button("boton 1", 0, 0, numColumns, numRows)
+        val child1 = Button("boton 2", 2, 2, 10, 5)
+        val child2 = Button("boton 3", 4, 5, 10, 5)
+        child1.onClickListener = this
+        child2.onClickListener = this
+        child.addChild(child1)
+        child.addChild(child2)
+        child.onClickListener = this
+        window?.view?.addChild(child)
         setOnTouchListener(this)
     }
 
-    fun paint() {
+    fun paint(map: Array<CharArray>) {
         val p1 = Paint()
         p1.color = Color.GREEN
         p1.textSize = 40F
         p1.textAlign = Paint.Align.CENTER
         p1.typeface = Typeface.MONOSPACE
 
-        if (map != null && holder.surface.isValid) {
+        if (holder.surface.isValid) {
+            Log.d("CustomSurfaceView", "PAINT")
             val canvas = holder.lockCanvas()
             canvas.drawColor(Color.BLACK)
-            for (i in 0..(map as Array<CharArray>).size - 1) {
-                (0..(map as Array<CharArray>)[i].size - 1)
-                        .filter { (map as Array<CharArray>)[i][it] != '*' }
-                        .forEach { canvas.drawText((map as Array<CharArray>)[i][it].toString(), (i * sizeW + sizeW / 2).toFloat(), (it * sizeH + sizeH).toFloat(), p1) }
+            for (i in 0..map.size - 1) {
+                (0..map [i].size - 1)
+                        .filter { map[i][it] != '*' }
+                        .forEach { canvas.drawText(map[i][it].toString(), (i * sizeW + sizeW / 2).toFloat(), (it * sizeH + sizeH).toFloat(), p1) }
             }
             holder.unlockCanvasAndPost(canvas)
         }
-    }
-
-    fun setChatAtPos(char: Char, x: Int, y: Int) {
-        map!![x][y] = char
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -88,26 +96,35 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, com.arstotzka.ascii
         sizeW = w / numColumns
     }
 
+    var movedView: AsciiView? = null
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (event?.action == ACTION_UP || event?.action == ACTION_MOVE) {
             val x = event.x * numColumns / this.width
             val y = event.y * numRows / this.height
-            view!!.onClick(event, x.toInt(), y.toInt())
+            window!!.onClick(event, x.toInt(), y.toInt())
         }
-
-
-
         return true
     }
 
-    override fun onClick(event: MotionEvent?, view: AsciiView?) {
-        (view as Button).changeText()
+    override fun onClickAsciiView(event: MotionEvent?, view: AsciiView?) : Boolean {
 
-        if (event?.action == ACTION_MOVE) {
-            val x = event.x * numColumns / this.width
+        if (event?.action == ACTION_UP)
+            (view as Button).changeText()
+
+
+        if (movedView == null && event?.action == ACTION_MOVE) {
+            movedView = view
+        }
+        if (movedView != null) {
+            val x = event!!.x * numColumns / this.width
             val y = event.y * numRows / this.height
 
-            (view as Button).moveTo(x.toInt(), y.toInt())
+            movedView?.moveTo(x.toInt(), y.toInt())
         }
+
+        if (event?.action == ACTION_UP && movedView != null) movedView = null
+
+        return false
     }
 }
