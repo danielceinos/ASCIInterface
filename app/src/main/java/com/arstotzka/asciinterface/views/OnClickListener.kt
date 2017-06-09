@@ -7,6 +7,6 @@ import android.view.MotionEvent
  */
 interface OnClickListener {
 
-    fun onClickAsciiView(event: MotionEvent?, view: AsciiView?): Boolean
+  fun onClickAsciiView(event: MotionEvent?, view: AsciiView?): Boolean
 
 }
