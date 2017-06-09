@@ -58,14 +58,13 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         })
         window = AsciiWindow(numColumns, numRows, this, Button("padre", 0, 0, numColumns, numRows))
         window?.view?.onClickListener = this
-        val child = Button("boton 1",3,3,10,5)
+        val child = Button("boton 1", 3, 3, 10, 5)
         child.onClickListener = this
         window?.view?.addChild(child)
         setOnTouchListener(this)
     }
 
     fun paint(map: Array<CharArray>) {
-        Log.d("CustomSurfaceView", "PAINT")
         val p1 = Paint()
         p1.color = Color.GREEN
         p1.textSize = 40F
@@ -73,6 +72,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         p1.typeface = Typeface.MONOSPACE
 
         if (holder.surface.isValid) {
+            Log.d("CustomSurfaceView", "PAINT")
             val canvas = holder.lockCanvas()
             canvas.drawColor(Color.BLACK)
             for (i in 0..map.size - 1) {
@@ -90,6 +90,8 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         sizeW = w / numColumns
     }
 
+    var movedView: AsciiView? = null
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if (event?.action == ACTION_UP || event?.action == ACTION_MOVE) {
             val x = event.x * numColumns / this.width
@@ -99,7 +101,18 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         return true
     }
 
-    override fun onClick(event: MotionEvent?, view: AsciiView?) {
-        (view as Button).changeText()
+    override fun onClickAsciiView(event: MotionEvent?, view: AsciiView?) {
+
+        if (movedView == null && event?.action == ACTION_MOVE) {
+            movedView = view
+        }
+        if (movedView != null) {
+            val x = event!!.x * numColumns / this.width
+            val y = event.y * numRows / this.height
+
+            movedView?.moveTo(x.toInt(), y.toInt())
+        }
+
+        if (event?.action == ACTION_UP && movedView != null) movedView = null
     }
 }

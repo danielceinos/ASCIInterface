@@ -55,8 +55,5 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
     }
 
 
-    fun moveTo(x: Int, y: Int) {
-        bounds?.offsetTo(x-width/2, y-height/2)
-        parent?.rePaint()
-    }
+
 }

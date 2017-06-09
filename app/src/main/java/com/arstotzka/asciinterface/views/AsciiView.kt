@@ -1,6 +1,7 @@
 package com.arstotzka.asciinterface.views
 
 import android.graphics.Rect
+import android.util.Log
 import android.view.MotionEvent
 
 /**
@@ -66,12 +67,11 @@ open class AsciiView {
     }
 
     fun onClick(event: MotionEvent?, x: Int, y: Int) {
-
         if (bounds?.contains(x, y)!!) {
             val childClicked: AsciiView? = childs.lastOrNull { it.onClickListener != null && it.bounds!!.contains(x, y) }
-            childClicked?.onClickListener?.onClick(event, childClicked)
+            childClicked?.onClickListener?.onClickAsciiView(event, childClicked)
             if (childClicked == null)
-                onClickListener?.onClick(event, this)
+                onClickListener?.onClickAsciiView(event, this)
         }
     }
 
@@ -86,6 +86,13 @@ open class AsciiView {
                 y++
                 x = 0
             }
+        }
+    }
+
+    open fun moveTo(x: Int, y: Int) {
+        if (x != this.bounds?.centerX() || y != this.bounds?.centerY()) {
+            bounds?.offsetTo(x - width / 2, y - height / 2)
+            parent?.rePaint()
         }
     }
 }
