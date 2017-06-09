@@ -57,7 +57,7 @@ open class AsciiView {
                         .forEach { mtx!![i + child.bounds!!.left][it + child.bounds!!.top] = childMtx[i][it] }
             }
         }
-
+        parent?.rePaint()
         window?.refresh()
     }
 

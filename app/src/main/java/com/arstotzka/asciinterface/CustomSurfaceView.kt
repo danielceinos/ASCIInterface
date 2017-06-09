@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
@@ -57,10 +58,14 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         })
         window = AsciiWindow(numColumns, numRows, this, Button("padre", 0, 0, numColumns, numRows))
         window?.view?.onClickListener = this
+        val child = Button("boton 1",3,3,10,5)
+        child.onClickListener = this
+        window?.view?.addChild(child)
         setOnTouchListener(this)
     }
 
     fun paint(map: Array<CharArray>) {
+        Log.d("CustomSurfaceView", "PAINT")
         val p1 = Paint()
         p1.color = Color.GREEN
         p1.textSize = 40F
