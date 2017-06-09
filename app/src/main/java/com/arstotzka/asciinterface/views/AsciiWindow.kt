@@ -14,7 +14,7 @@ class AsciiWindow {
     val height: Int
     val surfaceView: CustomSurfaceView
     val bounds: Rect
-    private var view: AsciiView
+    var view: AsciiView
 
     constructor(width: Int, height: Int, surfaceView: CustomSurfaceView, view: AsciiView) {
         this.width = width

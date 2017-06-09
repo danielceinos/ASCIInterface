@@ -14,13 +14,15 @@ import com.arstotzka.asciinterface.views.AsciiView
 import com.arstotzka.asciinterface.views.AsciiWindow
 import com.arstotzka.asciinterface.views.Button
 import android.view.SurfaceHolder
+import com.arstotzka.asciinterface.views.OnClickListener
 
 
 /**
  * Created by Daniel S on 29/05/2017.
  */
 
-class CustomSurfaceView : SurfaceView, View.OnTouchListener {
+class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
+
 
     private var sizeW = 0
     private var sizeH = 0
@@ -54,6 +56,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
 
         })
         window = AsciiWindow(numColumns, numRows, this, Button("padre", 0, 0, numColumns, numRows))
+        window?.view?.onClickListener = this
         setOnTouchListener(this)
     }
 
@@ -89,5 +92,9 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
             window!!.onClick(event, x.toInt(), y.toInt())
         }
         return true
+    }
+
+    override fun onClick(event: MotionEvent?, view: AsciiView?) {
+        (view as Button).changeText()
     }
 }
