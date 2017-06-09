@@ -6,11 +6,4 @@ package com.arstotzka.asciinterface.layout
 class AsciiLinearLayout {
 
 
-
-
-
-
-
-
-
 }

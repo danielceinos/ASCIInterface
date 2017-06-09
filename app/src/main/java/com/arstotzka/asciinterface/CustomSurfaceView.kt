@@ -9,21 +9,19 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_MOVE
 import android.view.MotionEvent.ACTION_UP
+import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import com.arstotzka.asciinterface.views.AsciiView
 import com.arstotzka.asciinterface.views.AsciiWindow
 import com.arstotzka.asciinterface.views.Button
-import android.view.SurfaceHolder
 import com.arstotzka.asciinterface.views.OnClickListener
-
 
 /**
  * Created by Daniel S on 29/05/2017.
  */
 
 class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
-
 
     private var sizeW = 0
     private var sizeH = 0
@@ -107,7 +105,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         return true
     }
 
-    override fun onClickAsciiView(event: MotionEvent?, view: AsciiView?) : Boolean {
+    override fun onClickAsciiView(event: MotionEvent?, view: AsciiView?): Boolean {
 
         if (event?.action == ACTION_UP)
             (view as Button).changeText()

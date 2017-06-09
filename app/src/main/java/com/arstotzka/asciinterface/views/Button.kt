@@ -53,7 +53,4 @@ class Button(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(
         parent?.rePaint()
         window?.refresh()
     }
-
-
-
 }

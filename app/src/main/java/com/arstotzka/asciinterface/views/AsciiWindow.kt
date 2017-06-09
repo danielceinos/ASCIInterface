@@ -3,7 +3,6 @@ package com.arstotzka.asciinterface.views
 import android.graphics.Rect
 import android.view.MotionEvent
 import com.arstotzka.asciinterface.CustomSurfaceView
-import java.lang.Thread.sleep
 
 /**
  * Created by Daniel S on 09/06/2017.

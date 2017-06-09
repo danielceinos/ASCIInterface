@@ -1,7 +1,6 @@
 package com.arstotzka.asciinterface.views
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.MotionEvent
 
 /**
