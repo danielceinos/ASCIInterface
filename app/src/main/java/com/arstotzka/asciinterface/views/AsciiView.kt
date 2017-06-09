@@ -2,6 +2,7 @@ package com.arstotzka.asciinterface.views
 
 import android.graphics.Rect
 import android.util.Log
+import android.view.MotionEvent
 
 /**
  * Created by Daniel S on 30/05/2017.
@@ -51,8 +52,8 @@ open class AsciiView {
             for (i in 0..childMtx!!.size - 1) {
                 (0..childMtx[i].size - 1)
                         .filter { childMtx[i][it] != TRANSPARENT_CHAR }
-                        .filter {i + child.bounds!!.left >= 0 && it + child.bounds!!.top >= 0  }
-                        .filter {i + child.bounds!!.left < mtx!!.size && it + child.bounds!!.top < mtx!![0].size  }
+                        .filter { i + child.bounds!!.left >= 0 && it + child.bounds!!.top >= 0 }
+                        .filter { i + child.bounds!!.left < mtx!!.size && it + child.bounds!!.top < mtx!![0].size }
                         .forEach { mtx!![i + child.bounds!!.left][it + child.bounds!!.top] = childMtx[i][it] }
             }
         }
@@ -62,15 +63,14 @@ open class AsciiView {
         mtx!![x][y] = char
     }
 
-    fun onClick(x: Int, y: Int) {
+    fun onClick(event: MotionEvent?, x: Int, y: Int) {
 
         if (bounds?.contains(x, y)!!) {
             val childClicked: AsciiView? = childs.lastOrNull { it.onClickListener != null && it.bounds!!.contains(x, y) }
-            childClicked?.onClickListener?.onClick(childClicked)
+            childClicked?.onClickListener?.onClick(event, childClicked)
             if (childClicked == null)
-                onClickListener?.onClick(this)
+                onClickListener?.onClick(event, this)
         }
-
     }
 
     open fun setTextLayout(textLayout: String) {
