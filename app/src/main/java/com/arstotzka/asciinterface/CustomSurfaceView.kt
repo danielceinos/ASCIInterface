@@ -58,7 +58,13 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         })
         window = AsciiWindow(numColumns, numRows, this, Button("padre", 0, 0, numColumns, numRows))
         window?.view?.onClickListener = this
-        val child = Button("boton 1", 3, 3, 10, 5)
+        val child = Button("boton 1", 0, 0, numColumns, numRows)
+        val child1 = Button("boton 2", 2, 2, 10, 5)
+        val child2 = Button("boton 3", 4, 5, 10, 5)
+        child1.onClickListener = this
+        child2.onClickListener = this
+        child.addChild(child1)
+        child.addChild(child2)
         child.onClickListener = this
         window?.view?.addChild(child)
         setOnTouchListener(this)
@@ -101,7 +107,11 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         return true
     }
 
-    override fun onClickAsciiView(event: MotionEvent?, view: AsciiView?) {
+    override fun onClickAsciiView(event: MotionEvent?, view: AsciiView?) : Boolean {
+
+        if (event?.action == ACTION_UP)
+            (view as Button).changeText()
+
 
         if (movedView == null && event?.action == ACTION_MOVE) {
             movedView = view
@@ -114,5 +124,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
         }
 
         if (event?.action == ACTION_UP && movedView != null) movedView = null
+
+        return false
     }
 }

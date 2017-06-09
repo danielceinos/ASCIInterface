@@ -66,13 +66,14 @@ open class AsciiView {
         mtx!![x][y] = char
     }
 
-    fun onClick(event: MotionEvent?, x: Int, y: Int) {
+    fun onClick(event: MotionEvent?, x: Int, y: Int): ArrayList<AsciiView> {
+        val listView = ArrayList<AsciiView>()
         if (bounds?.contains(x, y)!!) {
-            val childClicked: AsciiView? = childs.lastOrNull { it.onClickListener != null && it.bounds!!.contains(x, y) }
-            childClicked?.onClickListener?.onClickAsciiView(event, childClicked)
-            if (childClicked == null)
-                onClickListener?.onClickAsciiView(event, this)
+            listView.add(this)
+            for (child in childs)
+                listView.addAll(child.onClick(event, x, y))
         }
+        return listView
     }
 
     open fun setTextLayout(textLayout: String) {
@@ -93,6 +94,7 @@ open class AsciiView {
         if (x != this.bounds?.centerX() || y != this.bounds?.centerY()) {
             bounds?.offsetTo(x - width / 2, y - height / 2)
             parent?.rePaint()
+            Log.d("AsciiView", "" + bounds?.top + " - " + bounds?.left)
         }
     }
 }

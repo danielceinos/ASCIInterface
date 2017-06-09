@@ -28,7 +28,8 @@ class AsciiWindow {
     }
 
     fun onClick(event: MotionEvent?, x: Int, y: Int) {
-        view.onClick(event, x, y)
+        val view = view.onClick(event, x, y).lastOrNull { it.onClickListener != null }
+        view?.onClickListener?.onClickAsciiView(event, view)
     }
 
     fun refresh() {
