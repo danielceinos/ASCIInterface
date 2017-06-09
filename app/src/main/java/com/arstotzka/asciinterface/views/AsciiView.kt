@@ -71,7 +71,7 @@ open class AsciiView {
         if (bounds?.contains(x, y)!!) {
             listView.add(this)
             for (child in childs)
-                listView.addAll(child.onClick(event, x, y))
+                listView.addAll(child.onClick(event, x - bounds!!.left, y - bounds!!.top))
         }
         return listView
     }
@@ -91,10 +91,11 @@ open class AsciiView {
     }
 
     open fun moveTo(x: Int, y: Int) {
-        if (x != this.bounds?.centerX() || y != this.bounds?.centerY()) {
-            bounds?.offsetTo(x - width / 2, y - height / 2)
-            parent?.rePaint()
-            Log.d("AsciiView", "" + bounds?.top + " - " + bounds?.left)
-        }
+//        if (x != this.bounds?.centerX() || y != this.bounds?.centerY()) {
+        val xx = bounds!!.left
+        val yy = bounds!!.top
+        bounds?.offsetTo(x, y)
+        parent?.rePaint()
+//        }
     }
 }
