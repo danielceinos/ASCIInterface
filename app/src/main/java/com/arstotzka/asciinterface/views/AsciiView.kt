@@ -75,6 +75,14 @@ open class AsciiView {
     return listView
   }
 
+  open fun getX(): Int {
+    return bounds!!.left
+  }
+
+  open fun getY(): Int {
+    return bounds!!.top
+  }
+
   open fun setTextLayout(textLayout: String) {
     var x = 0
     var y = 0

@@ -14,7 +14,7 @@ import android.view.SurfaceView
 import android.view.View
 import com.arstotzka.asciinterface.views.AsciiView
 import com.arstotzka.asciinterface.views.AsciiWindow
-import com.arstotzka.asciinterface.views.Button
+import com.arstotzka.asciinterface.views.ButtonAsciiView
 import com.arstotzka.asciinterface.views.OnClickListener
 
 /**
@@ -28,6 +28,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
   private val numColumns = 40
   private val numRows = 29
   private var window: AsciiWindow? = null
+
 
   constructor(context: Context) : super(context) {
     init()
@@ -54,19 +55,16 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
       override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
     })
-    window = AsciiWindow(numColumns, numRows, this, Button("padre", 0, 0, numColumns, numRows))
+    window = AsciiWindow(numColumns, numRows, this, ButtonAsciiView("padre", 0, 0, numColumns, numRows))
     window?.view?.onClickListener = this
-    val child = Button("boton 1", 0, 0, numColumns, numRows)
-    val child1 = Button("boton 2", 2, 2, 10, 5)
-    val child2 = Button("boton 3", 4, 5, 10, 5)
-    val child3 = Button("boton M", 4, 5, 10, 5)
+    val child = ButtonAsciiView("boton 1", 0, 0, numColumns, numRows)
+    val child1 = ButtonAsciiView("boton 2", 2, 2, 10, 5)
+    val child2 = ButtonAsciiView("boton 3", 4, 5, 10, 5)
     child1.onClickListener = this
     child2.onClickListener = this
-    child3.onClickListener = this
     child.addChild(child1)
     child.addChild(child2)
     child.onClickListener = this
-    window?.view?.addChild(child3)
     window?.view?.addChild(child)
     setOnTouchListener(this)
   }
@@ -111,7 +109,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
   override fun onClickAsciiView(event: MotionEvent?, view: AsciiView?): Boolean {
 
     if (event?.action == ACTION_UP)
-      (view as Button).changeText()
+      (view as ButtonAsciiView).changeText()
 
 
     if (movedView == null && event?.action == ACTION_MOVE) {
