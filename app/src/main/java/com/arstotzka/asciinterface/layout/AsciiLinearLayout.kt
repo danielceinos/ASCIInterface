@@ -8,7 +8,11 @@ import com.arstotzka.asciinterface.views.AsciiView
 class AsciiLinearLayout(x: Int, y: Int, with: Int, height: Int) : AsciiView(x, y, with, height) {
 
   override fun addChild(child: AsciiView) {
-    child.setY(childs.last().getY() + childs.last().height)
+    if (childs.size > 0)
+      child.setY(childs.last().getY() + childs.last().height )
+    else
+      child.setY(0)
+
     super.addChild(child)
   }
 

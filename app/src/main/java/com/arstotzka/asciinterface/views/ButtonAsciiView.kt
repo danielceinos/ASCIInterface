@@ -8,6 +8,8 @@ class ButtonAsciiView(text: String, x: Int, y: Int, width: Int, height: Int) : A
 
   var textView: TextAsciiView
 
+  constructor(text: String, width: Int, height: Int) : this(text, 0, 0, width, height)
+
   init {
     clear()
     textView = TextAsciiView(text, width / 2 - text.length / 2, height / 2)

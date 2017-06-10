@@ -43,6 +43,8 @@ open class AsciiView {
     for (i in 0..childMtx!!.size - 1) {
       (0..childMtx[i].size - 1)
           .filter { childMtx[i][it] != TRANSPARENT_CHAR }
+          .filter { i + child.bounds!!.left >= 0 && it + child.bounds!!.top >= 0 }
+          .filter { i + child.bounds!!.left < mtx!!.size && it + child.bounds!!.top < mtx!![0].size }
           .forEach { mtx!![i + child.bounds!!.left][it + child.bounds!!.top] = childMtx[i][it] }
     }
   }
