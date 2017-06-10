@@ -59,11 +59,14 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
     val child = Button("boton 1", 0, 0, numColumns, numRows)
     val child1 = Button("boton 2", 2, 2, 10, 5)
     val child2 = Button("boton 3", 4, 5, 10, 5)
+    val child3 = Button("boton M", 4, 5, 10, 5)
     child1.onClickListener = this
     child2.onClickListener = this
+    child3.onClickListener = this
     child.addChild(child1)
     child.addChild(child2)
     child.onClickListener = this
+    window?.view?.addChild(child3)
     window?.view?.addChild(child)
     setOnTouchListener(this)
   }
