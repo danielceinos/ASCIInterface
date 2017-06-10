@@ -12,11 +12,13 @@ open class AsciiView {
   var height: Int
   var bounds: Rect? = null
   var mtx: Array<CharArray>?
-  private var childs: ArrayList<AsciiView> = ArrayList()
+  var childs: ArrayList<AsciiView> = ArrayList()
   var parent: AsciiView? = null
   var window: AsciiWindow? = null
   var onClickListener: OnClickListener? = null
   val TRANSPARENT_CHAR = '*'
+
+  constructor(width: Int, height: Int) : this(0, 0, width, height)
 
   constructor(x: Int, y: Int, width: Int, height: Int) {
     this.width = width
@@ -34,13 +36,15 @@ open class AsciiView {
     }
   }
 
-  fun addChild(child: AsciiView) {
+  open fun addChild(child: AsciiView) {
     childs.add(child)
     child.parent = this
     val childMtx = child.mtx
     for (i in 0..childMtx!!.size - 1) {
       (0..childMtx[i].size - 1)
           .filter { childMtx[i][it] != TRANSPARENT_CHAR }
+          .filter { i + child.bounds!!.left >= 0 && it + child.bounds!!.top >= 0 }
+          .filter { i + child.bounds!!.left < mtx!!.size && it + child.bounds!!.top < mtx!![0].size }
           .forEach { mtx!![i + child.bounds!!.left][it + child.bounds!!.top] = childMtx[i][it] }
     }
   }
@@ -81,6 +85,14 @@ open class AsciiView {
 
   open fun getY(): Int {
     return bounds!!.top
+  }
+
+  open fun setX(x: Int) {
+    bounds!!.left = x
+  }
+
+  open fun setY(y: Int) {
+    bounds!!.top = y
   }
 
   open fun setTextLayout(textLayout: String) {

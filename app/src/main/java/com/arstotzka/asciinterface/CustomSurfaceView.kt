@@ -12,6 +12,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
+import com.arstotzka.asciinterface.layout.AsciiLinearLayout
 import com.arstotzka.asciinterface.views.AsciiView
 import com.arstotzka.asciinterface.views.AsciiWindow
 import com.arstotzka.asciinterface.views.ButtonAsciiView
@@ -55,17 +56,20 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener, OnClickListener {
       override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
     })
-    window = AsciiWindow(numColumns, numRows, this, ButtonAsciiView("padre", 0, 0, numColumns, numRows))
+    window = AsciiWindow(numColumns, numRows, this, AsciiLinearLayout(0, 0, numColumns, numRows))
     window?.view?.onClickListener = this
-    val child = ButtonAsciiView("boton 1", 0, 0, numColumns, numRows)
-    val child1 = ButtonAsciiView("boton 2", 2, 2, 10, 5)
-    val child2 = ButtonAsciiView("boton 3", 4, 5, 10, 5)
-    child1.onClickListener = this
-    child2.onClickListener = this
-    child.addChild(child1)
-    child.addChild(child2)
-    child.onClickListener = this
+
+    val child = ButtonAsciiView("boton 1", 10, 5)
+    val child1 = ButtonAsciiView("boton 2", 10, 5)
+    val child2 = ButtonAsciiView("boton 3", 10, 5)
+
     window?.view?.addChild(child)
+    window?.view?.addChild(child1)
+    window?.view?.addChild(child2)
+    window?.view?.addChild(child2)
+    window?.view?.addChild(child2)
+    window?.view?.addChild(child2)
+
     setOnTouchListener(this)
   }
 
