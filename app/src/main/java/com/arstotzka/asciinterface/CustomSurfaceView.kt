@@ -7,12 +7,13 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import com.arstotzka.asciinterface.views.AsciiView
+import com.arstotzka.asciinterface.views.AsciiView.Companion.TRANSPARENT_CHAR
 import com.arstotzka.asciinterface.views.AsciiWindow
 import com.arstotzka.asciinterface.views.ButtonAsciiView
 
@@ -52,16 +53,16 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
         window.view = father
 
         val child = ButtonAsciiView("boton 1", 0, 0, numColumns, numRows)
-        val child1 = ButtonAsciiView("boton 2", 2, 2, 10, 5)
-        val child2 = ButtonAsciiView("boton 3", 4, 5, 10, 5)
+        val child1 = ButtonAsciiView("boton 2", 2, 2, 10, 5).apply { color = Color.CYAN }
+        val child2 = ButtonAsciiView("boton 3", 4, 5, 10, 5).apply { color = Color.MAGENTA }
         child.addChild(child1)
         child.addChild(child2)
-        window.view?.addChild(child)
+        father.addChild(child)
 
         setOnTouchListener(this)
     }
 
-    fun paint(map: Array<CharArray>) {
+    fun paint(map: Array<CharArray>, colorMap: Array<IntArray>) {
         Log.i("CustomSurfaceView", "Start paint")
         val startTimestamp = System.currentTimeMillis()
 
@@ -76,15 +77,17 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
             canvas.drawColor(Color.BLACK)
             for (i in 0 until map.size) {
                 (0 until map[i].size)
-                    .filter { map[i][it] != '*' }
-                    .forEach { canvas.drawText(map[i][it].toString(), (i * sizeW + sizeW / 2).toFloat(), (it * sizeH + sizeH).toFloat(), p1) }
+                    .filter { map[i][it] != TRANSPARENT_CHAR }
+                    .forEach {
+                        p1.color = colorMap[i][it]
+                        canvas.drawText(map[i][it].toString(), (i * sizeW + sizeW / 2).toFloat(), (it * sizeH + sizeH).toFloat(), p1)
+                    }
             }
             holder.unlockCanvasAndPost(canvas)
         }
 
         Log.i("CustomSurfaceView", "Paint finished")
         Log.i("CustomSurfaceView", "Elapsed time = ${System.currentTimeMillis() - startTimestamp}")
-
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -93,12 +96,17 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
         sizeW = w / numColumns
     }
 
+    private var previousTouchEventAction: Int = -1
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if (event?.action == ACTION_UP || event?.action == ACTION_MOVE) {
+        Log.v("onTouch", "${event?.action}")
+        if (event?.action == ACTION_UP && previousTouchEventAction == ACTION_DOWN) {
+            Log.v("onTouch", "Simple click")
             val x = event.x * numColumns / this.width
             val y = event.y * numRows / this.height
             window.onClick(event, x.toInt(), y.toInt())
         }
+        previousTouchEventAction = event?.action ?: -1
         return true
     }
 }

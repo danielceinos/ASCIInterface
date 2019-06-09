@@ -1,5 +1,7 @@
 package com.arstotzka.asciinterface.views
 
+import android.graphics.Color
+
 /**
  * Created by Daniel S on 01/06/2017.
  */
@@ -9,15 +11,11 @@ class ButtonAsciiView(text: String, x: Int, y: Int, width: Int, height: Int) : A
     var textView: TextAsciiView
 
     init {
-        clear()
         textView = TextAsciiView(text, width / 2 - text.length / 2, height / 2)
         addChild(textView)
-        parent?.addChild(this)
         clickable = true
-
-        onAsciiViewClickListener = { x, y ->
-            changeText()
-        }
+        onAsciiViewClickListener = { x, y -> changeText() }
+        clear()
     }
 
     override fun clear() {
@@ -38,6 +36,6 @@ class ButtonAsciiView(text: String, x: Int, y: Int, width: Int, height: Int) : A
     }
 
     fun changeText() {
-        textView.changeText("hit")
+        textView.changeText("hitme up hard")
     }
 }

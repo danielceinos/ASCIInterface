@@ -24,7 +24,7 @@ class AsciiWindow(width: Int, height: Int, private val surfaceView: CustomSurfac
 
     fun refresh() {
         view?.let {
-            surfaceView.paint(it.mtx)
+            surfaceView.paint(it.mtx, it.colorMtx)
         }
     }
 }

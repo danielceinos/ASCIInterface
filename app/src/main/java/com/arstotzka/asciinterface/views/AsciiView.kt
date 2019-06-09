@@ -1,5 +1,6 @@
 package com.arstotzka.asciinterface.views
 
+import android.graphics.Color
 import android.graphics.Rect
 import android.view.MotionEvent
 
@@ -9,20 +10,21 @@ import android.view.MotionEvent
 open class AsciiView(x: Int, y: Int, var width: Int, var height: Int) {
 
     var window: AsciiWindow? = null
-    var bounds: Rect
-    var mtx: Array<CharArray>
-    var childs: ArrayList<AsciiView> = ArrayList()
+    var bounds: Rect = Rect(x, y, width + x, height + y)
+    var mtx: Array<CharArray> = Array(width) { CharArray(height) }
+    var colorMtx: Array<IntArray> = Array(width) { IntArray(height) }
+    var children: ArrayList<AsciiView> = ArrayList()
     var parent: AsciiView? = null
     var clickable: Boolean = false
     var onAsciiViewClickListener: (x: Int, y: Int) -> Unit = { x, y -> }
+    open var color: Int = Color.GREEN
+        set(value) {
+            field = value
+            rePaint()
+        }
 
     companion object {
-        val TRANSPARENT_CHAR = '*'
-    }
-
-    init {
-        bounds = Rect(x, y, width + x, height + y)
-        mtx = Array(width) { CharArray(height) }
+        const val TRANSPARENT_CHAR = '*'
     }
 
     open fun clear() {
@@ -34,28 +36,38 @@ open class AsciiView(x: Int, y: Int, var width: Int, var height: Int) {
     }
 
     open fun addChild(child: AsciiView) {
-        childs.add(child)
+        children.add(child)
         child.parent = this
         val childMtx = child.mtx
+        val childColorMtx = child.colorMtx
+
         for (i in 0 until childMtx.size) {
             (0 until childMtx[i].size)
                 .filter { childMtx[i][it] != TRANSPARENT_CHAR }
                 .filter { i + child.bounds.left >= 0 && it + child.bounds.top >= 0 }
                 .filter { i + child.bounds.left < mtx.size && it + child.bounds.top < mtx[0].size }
-                .forEach { mtx[i + child.bounds.left][it + child.bounds.top] = childMtx[i][it] }
+                .forEach {
+                    mtx[i + child.bounds.left][it + child.bounds.top] = childMtx[i][it]
+                    colorMtx[i + child.bounds.left][it + child.bounds.top] = childColorMtx[i][it]
+                }
         }
     }
 
     open fun rePaint() {
         clear()
-        for (child in childs) {
+        for (child in children) {
             val childMtx = child.mtx
+            val childColorMtx = child.colorMtx
+
             for (i in 0 until childMtx.size) {
                 (0 until childMtx[i].size)
                     .filter { childMtx[i][it] != TRANSPARENT_CHAR }
                     .filter { i + child.bounds.left >= 0 && it + child.bounds.top >= 0 }
                     .filter { i + child.bounds.left < mtx.size && it + child.bounds.top < mtx[0].size }
-                    .forEach { mtx[i + child.bounds.left][it + child.bounds.top] = childMtx[i][it] }
+                    .forEach {
+                        mtx[i + child.bounds.left][it + child.bounds.top] = childMtx[i][it]
+                        colorMtx[i + child.bounds.left][it + child.bounds.top] = childColorMtx[i][it]
+                    }
             }
         }
         parent?.rePaint()
@@ -63,13 +75,15 @@ open class AsciiView(x: Int, y: Int, var width: Int, var height: Int) {
     }
 
     open fun setChar(x: Int, y: Int, char: Char) {
-        if (mtx.size > x && mtx[0].size > y)
+        if (mtx.size > x && mtx[0].size > y) {
             mtx[x][y] = char
+            colorMtx[x][y] = color
+        }
     }
 
     open fun onClick(event: MotionEvent?, x: Int, y: Int): Boolean {
         if (bounds.contains(x, y)) {
-            for (child in childs) {
+            for (child in children.reversed()) {
                 val clickHandled = child.onClick(event, x - bounds.left, y - bounds.top)
                 if (clickHandled) return true
             }
