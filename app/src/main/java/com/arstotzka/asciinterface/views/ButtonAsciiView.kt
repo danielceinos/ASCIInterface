@@ -6,33 +6,38 @@ package com.arstotzka.asciinterface.views
 
 class ButtonAsciiView(text: String, x: Int, y: Int, width: Int, height: Int) : AsciiView(x, y, width, height) {
 
-  var textView: TextAsciiView
+    var textView: TextAsciiView
 
-  init {
-    clear()
-    textView = TextAsciiView(text, width / 2 - text.length / 2, height / 2)
-    addChild(textView)
-    parent?.addChild(this)
-  }
+    init {
+        clear()
+        textView = TextAsciiView(text, width / 2 - text.length / 2, height / 2)
+        addChild(textView)
+        parent?.addChild(this)
+        clickable = true
 
-  override fun clear() {
-    super.clear()
-
-    setChar(0, 0, '╔')
-    setChar(width - 1, 0, '╗')
-    setChar(0, height - 1, '╚')
-    setChar(width - 1, height - 1, '╝')
-    for (i in 1..width - 2) {
-      setChar(i, 0, '═')
-      setChar(i, height - 1, '═')
+        onAsciiViewClickListener = { x, y ->
+            changeText()
+        }
     }
-    for (i in 1..height - 2) {
-      setChar(0, i, '║')
-      setChar(width - 1, i, '║')
-    }
-  }
 
-  fun changeText() {
-    textView.changeText("pulsado")
-  }
+    override fun clear() {
+        super.clear()
+
+        setChar(0, 0, '╔')
+        setChar(width - 1, 0, '╗')
+        setChar(0, height - 1, '╚')
+        setChar(width - 1, height - 1, '╝')
+        for (i in 1..width - 2) {
+            setChar(i, 0, '═')
+            setChar(i, height - 1, '═')
+        }
+        for (i in 1..height - 2) {
+            setChar(0, i, '║')
+            setChar(width - 1, i, '║')
+        }
+    }
+
+    fun changeText() {
+        textView.changeText("hit")
+    }
 }

@@ -7,22 +7,24 @@ import com.arstotzka.asciinterface.CustomSurfaceView
 /**
  * Created by Daniel S on 09/06/2017.
  */
-class AsciiWindow(width: Int, height: Int, private val surfaceView: CustomSurfaceView, var view: AsciiView) {
+class AsciiWindow(width: Int, height: Int, private val surfaceView: CustomSurfaceView) {
 
-  private val bounds: Rect
+    private val bounds: Rect = Rect(0, 0, width, height)
 
-  init {
-    view.window = this
-    bounds = Rect(0, 0, width, height)
-    view.rePaint()
-  }
+    var view: AsciiView? = null
+        set(value) {
+            value?.window = this
+            field = value
+            field?.rePaint()
+        }
 
-  fun onClick(event: MotionEvent?, x: Int, y: Int) {
-    val view = view.onClick(event, x, y).lastOrNull { it.onClickListener != null }
-    view?.onClickListener?.onClickAsciiView(event, view)
-  }
+    fun onClick(event: MotionEvent?, x: Int, y: Int) {
+        view?.onClick(event, x, y)
+    }
 
-  fun refresh() {
-    surfaceView.paint(view.mtx)
-  }
+    fun refresh() {
+        view?.let {
+            surfaceView.paint(it.mtx)
+        }
+    }
 }

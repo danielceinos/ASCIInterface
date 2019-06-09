@@ -1,6 +1,7 @@
 package com.arstotzka.asciinterface.layout
 
 import com.arstotzka.asciinterface.views.AsciiView
+import com.arstotzka.asciinterface.views.AsciiWindow
 
 /**
  * Created by Daniel S on 10/06/2017.
