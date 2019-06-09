@@ -3,9 +3,7 @@ package com.arstotzka.asciinterface.views
 /**
  * Created by Daniel S on 10/06/2017.
  */
-class TextAsciiView(text: String, x: Int, y: Int) : AsciiView(x, y, text.length, 1) {
-
-  var text: String = text
+class TextAsciiView(private var text: String, x: Int, y: Int) : AsciiView(x, y, text.length, 1) {
 
   init {
     clear()
@@ -22,7 +20,7 @@ class TextAsciiView(text: String, x: Int, y: Int) : AsciiView(x, y, text.length,
     }
   }
 
-  open fun changeText(text: String) {
+  fun changeText(text: String) {
     this.text = text
     clear()
     parent?.rePaint()
