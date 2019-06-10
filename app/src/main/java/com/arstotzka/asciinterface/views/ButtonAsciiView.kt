@@ -10,6 +10,13 @@ class ButtonAsciiView(text: String, x: Int, y: Int, width: Int, height: Int) : A
 
     var textView: TextAsciiView
 
+    override var color: Int = Color.RED
+        set(value) {
+            field = value
+            textView.color = value
+            rePaint()
+        }
+
     init {
         textView = TextAsciiView(text, width / 2 - text.length / 2, height / 2)
         addChild(textView)
@@ -21,21 +28,21 @@ class ButtonAsciiView(text: String, x: Int, y: Int, width: Int, height: Int) : A
     override fun clear() {
         super.clear()
 
-        setChar(0, 0, '╔')
-        setChar(width - 1, 0, '╗')
-        setChar(0, height - 1, '╚')
-        setChar(width - 1, height - 1, '╝')
+        setChar(0, 0, '┌')
+        setChar(width - 1, 0, '┐')
+        setChar(0, height - 1, '└')
+        setChar(width - 1, height - 1, '┘')
         for (i in 1..width - 2) {
-            setChar(i, 0, '═')
-            setChar(i, height - 1, '═')
+            setChar(i, 0, '─')
+            setChar(i, height - 1, '─')
         }
         for (i in 1..height - 2) {
-            setChar(0, i, '║')
-            setChar(width - 1, i, '║')
+            setChar(0, i, '│')
+            setChar(width - 1, i, '│')
         }
     }
 
     fun changeText() {
-        textView.changeText("hitme up hard")
+        textView.changeText("Hit!")
     }
 }

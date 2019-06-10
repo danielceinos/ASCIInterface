@@ -1,7 +1,5 @@
 package com.arstotzka.asciinterface.views
 
-import android.graphics.Rect
-
 /**
  * Created by Daniel S on 10/06/2017.
  */
@@ -24,8 +22,6 @@ class TextAsciiView(private var text: String, x: Int, y: Int) : AsciiView(x, y, 
 
     fun changeText(text: String) {
         this.text = text
-        parent?.let { color = it.color }
-
         rePaint()
     }
 }

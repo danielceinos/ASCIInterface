@@ -26,7 +26,7 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
     private var sizeW = 0
     private var sizeH = 0
     private val numColumns = 40
-    private val numRows = 29
+    private val numRows = 32
     private var window: AsciiWindow
 
     constructor(context: Context) : super(context)
@@ -52,12 +52,18 @@ class CustomSurfaceView : SurfaceView, View.OnTouchListener {
         val father = AsciiView(0, 0, numColumns, numRows)
         window.view = father
 
-        val child = ButtonAsciiView("boton 1", 0, 0, numColumns, numRows)
-        val child1 = ButtonAsciiView("boton 2", 2, 2, 10, 5).apply { color = Color.CYAN }
-        val child2 = ButtonAsciiView("boton 3", 4, 5, 10, 5).apply { color = Color.MAGENTA }
-        child.addChild(child1)
-        child.addChild(child2)
-        father.addChild(child)
+        val child1 = ButtonAsciiView("boton 1", 2, 2, 10, 5).apply { color = Color.CYAN }
+        val child2 = ButtonAsciiView("boton 2", 4, 10, 10, 5).apply { color = Color.RED }
+        val child3 = ButtonAsciiView("boton 3", 4, 16, 10, 5).apply { color = Color.YELLOW }
+        val child4 = ButtonAsciiView("boton 4", 4, 21, 10, 5).apply { color = Color.GREEN }
+        val child5 = ButtonAsciiView("boton 5", 12, 5, 10, 5).apply { color = Color.LTGRAY }
+
+
+        father.addChild(child1)
+        father.addChild(child2)
+        father.addChild(child3)
+        father.addChild(child4)
+        father.addChild(child5)
 
         setOnTouchListener(this)
     }
